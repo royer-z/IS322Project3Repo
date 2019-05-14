@@ -33,7 +33,7 @@ class HomeView extends React.Component {
     render() {
         return (
             <div>
-                <GridView />;
+                <GridView />
             </div>
         );
     }
