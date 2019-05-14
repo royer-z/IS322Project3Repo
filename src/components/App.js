@@ -1,25 +1,41 @@
-import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import React from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
 
-import NavBar from "./NavBar";
-import HomeView from "./HomeView";
-import AddTaskView from "./AddTaskView";
-import TaskList from "./TaskList";
+import TaskList from './TaskList';
+import AddTask from './AddTask';
+import { setTasks, tasksError } from "../actions";
 
-const App = () => {
+class App extends React.Component {
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
+    axios.get('http://my-json-server.typicode.com/bnissen24/project2DB/accounts')
+      .then(response => {
+        this.props.setTasks(response.data);
+      }).catch(error => {
+        this.props.tasksError();
+      });
+  }
+
+  render() {
     return (
-        // listTitle options: todo, inprogress, review, done
-        <div>
-            <BrowserRouter>
-                <NavBar/>
-                <div>
-                    <Route path="/" exact component={ HomeView } />
-                    <Route path="/AddTask" exact component={ AddTaskView } />
-                    <Route path="/lists/:listTitle" exact component={ TaskList } />
-                </div>
-            </BrowserRouter>
-        </div>
+      <div className="container">
+        <AddTask />
+        <TaskList />
+      </div>
     );
-};
+  }
 
-export default App;
+}
+
+const mapStateToProps = (state) => {
+  return {
+    errorMessage: state.errors.getTasks
+  };
+}
+
+export default connect(mapStateToProps, { setTasks, tasksError })(App);
