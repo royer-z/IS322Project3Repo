@@ -1,8 +1,20 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 import '../styles/NavBar.css';
 
-const NavBar = props => {
-    if (props.view === "gridView") {
+class NavBar extends React.Component{
+    state = {currentPage: "/"};
+
+    isActiveTab(tabName) {
+        return (tabName === this.state.currentPage) ? "nav-link current" : "nav-link notCurrent";
+    }
+
+    onTabClick(event, tabName) {
+        this.setState({ currentPage: tabName })
+    }
+
+    render() {
         return (
             <div className="row">
                 <header className="col-sm">
@@ -10,10 +22,10 @@ const NavBar = props => {
                         <div>
                             <ul className="navbar-nav">
                                 <li className="nav-item">
-                                    <a className="nav-link current" href="#">Grid View</a>
+                                    <Link className={this.isActiveTab('/')} to="/" onClick={event => this.onTabClick(event, '/')}>Grid View</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link notCurrent" href="#" onClick={props.onClick}>Add Task</a>
+                                    <Link className={this.isActiveTab('/AddTask')} to="/AddTask" onClick={event => this.onTabClick(event, '/AddTask')}>Add Task</Link>
                                 </li>
                             </ul>
                         </div>
@@ -22,26 +34,6 @@ const NavBar = props => {
             </div>
         )
     }
-    else {
-        return (
-            <div className="row">
-                <header className="col-sm">
-                    <nav className="navbar navbar-expand-sm">
-                        <div>
-                            <ul className="navbar-nav">
-                                <li className="nav-item">
-                                    <a className="nav-link notCurrent" href="#" onClick={props.onClick}>Grid View</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link current" href="#">Add Task</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </header>
-            </div>
-        )
-    }
-};
+}
 
 export default NavBar;

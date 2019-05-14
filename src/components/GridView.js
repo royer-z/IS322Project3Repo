@@ -67,7 +67,7 @@ class GridView extends React.Component {
                     <div className="card oddCard fullHeight">
                         <div className="card-body">
                             <div className="card-title"><h2>To Do</h2></div>
-                                {taskItems3}
+                            {taskItems3}
                         </div>
                     </div>
                 </div>

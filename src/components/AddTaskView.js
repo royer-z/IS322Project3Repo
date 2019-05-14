@@ -5,14 +5,14 @@ import { addTask } from "../actions";
 
 class AddTaskView extends React.Component {
 
-    state = { newTask: '', type: "task", column: "todo" }
+    state = { newTask: '', type: "task", column: "todo" };
 
     onFormSubmit = (event) => {
         event.preventDefault();
 
         this.props.addTask(this.state.newTask, this.state.type, this.state.column);
-        this.setState({ newTask: '', type: "task", column: "todo" })
-        this.props.onSubmit();
+        this.setState({ newTask: '', type: "task", column: "todo" });
+        this.props.history.push('/');
     };
 
     render() {

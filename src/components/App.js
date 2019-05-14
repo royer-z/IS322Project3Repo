@@ -1,71 +1,22 @@
-import React from 'react';
-import axios from 'axios';
-import { connect } from "react-redux";
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import NavBar from './NavBar';
-import GridView from './GridView';
-import AddTaskView from './AddTaskView';
-import { setTasks, tasksError } from "../actions";
+import HomeView from "./HomeView";
+import AddTaskView from "./AddTaskView";
+import NavBar from "./NavBar";
 
-class App extends React.Component {
-    constructor (props) {
-        super(props);
-        this.handleGridViewClick = this.handleGridViewClick.bind(this);
-        this.handleAddTaskClick = this.handleAddTaskClick.bind(this);
-        this.state = {view: "gridView"};
-    }
-
-    componentDidMount() {
-        this.getData();
-    }
-
-    getData() {
-        axios.get('http://my-json-server.typicode.com/bnissen24/project2DB/posts')
-            .then(response => {
-                this.props.setTasks(response.data);
-            }).catch(error => {
-            this.props.tasksError();
-        });
-    }
-
-    handleGridViewClick () {
-        this.setState({ view: "gridView"});
-    }
-
-    handleAddTaskClick () {
-        this.setState({ view: "addTaskView"});
-    }
-
-    onAddTask = () => {
-        this.setState({view: "gridView"})
-    };
-
-    render() {
-        // Conditional rendering
-        let view, navBar;
-
-        if (this.state.view === "gridView") {
-            navBar = <NavBar view={this.state.view} onClick={this.handleAddTaskClick} />;
-            view = <GridView />;
-        }
-        else {
-            navBar = <NavBar view={this.state.view} onClick={this.handleGridViewClick} />;
-            view = <AddTaskView onSubmit={this.onAddTask} />;
-        }
-
-        return (
-            <div>
-                { navBar }
-                { view }
-            </div>
-        );
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        errorMessage: state.errors.getTasks
-    };
+const App = () => {
+    return (
+        <div>
+            <BrowserRouter>
+                <NavBar/>
+                <div>
+                    <Route path="/" exact component={ HomeView } />
+                    <Route path="/AddTask" exact component={ AddTaskView } />
+                </div>
+            </BrowserRouter>
+        </div>
+    );
 };
 
-export default connect(mapStateToProps, { setTasks, tasksError })(App);
+export default App;
