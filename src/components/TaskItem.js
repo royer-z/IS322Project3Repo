@@ -31,6 +31,11 @@ const TaskItem = props => {
                         className="btn btn-primary mt-3 mr-3">
                     Review
                 </button>
+                <button type="button"
+                        onClick={() => props.deleteTask(props.task)}
+                        className="btn btn-danger mt-3 mr-3">
+                    Delete
+                </button>
             </div>
         </div>
     )

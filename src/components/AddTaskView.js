@@ -1,21 +1,18 @@
 import React from 'react';
+import { connect } from "react-redux";
+
+import { addTask } from "../actions";
 
 class AddTaskView extends React.Component {
-    constructor (props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.state = { newTask: "", type:  "task"};
-    }
 
-    handleChange (event) {
-        this.setState({type: event.target.value});
-    }
+    state = { newTask: '', type: "task", column: "todo" }
 
     onFormSubmit = (event) => {
         event.preventDefault();
 
-        this.props.onSubmit(this.state.newTask, this.state.type);
-        this.setState({ newTask: "", type: ""})
+        this.props.addTask(this.state.newTask, this.state.type, this.state.column);
+        this.setState({ newTask: '', type: "task", column: "todo" })
+        this.props.onSubmit();
     };
 
     render() {
@@ -26,7 +23,7 @@ class AddTaskView extends React.Component {
                 <input type="text" className="form-control" name="newTask" value={this.state.newTask} onChange={(e) => this.setState({ newTask: e.target.value })} />
                 <br></br>
                 <label><h3>Type</h3></label>
-                    <select onChange={this.handleChange} className="form-control">
+                    <select onChange={(e) => this.setState({ type: e.target.value })} className="form-control">
                         <option value="task">task</option>
                         <option value="bug">bug</option>
                         <option value="feature">feature</option>
@@ -38,4 +35,4 @@ class AddTaskView extends React.Component {
     };
 }
 
-export default AddTaskView;
+export default connect(null, { addTask })(AddTaskView);

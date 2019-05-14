@@ -1,29 +1,30 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from "react-redux";
 
+import NavBar from './NavBar';
 import GridView from './GridView';
 import AddTaskView from './AddTaskView';
-import NavBar from './NavBar';
+import { setTasks, tasksError } from "../actions";
 
 class App extends React.Component {
     constructor (props) {
         super(props);
         this.handleGridViewClick = this.handleGridViewClick.bind(this);
         this.handleAddTaskClick = this.handleAddTaskClick.bind(this);
-        this.state = {view: "gridView", tasks: [], errorMessage: ''};
+        this.state = {view: "gridView"};
     }
 
     componentDidMount() {
         this.getData();
     }
 
-    // API request
     getData() {
         axios.get('http://my-json-server.typicode.com/bnissen24/project2DB/posts')
             .then(response => {
-                this.setState({ tasks: response.data });
+                this.props.setTasks(response.data);
             }).catch(error => {
-            this.setState({ errorMessage: error.message });
+            this.props.tasksError();
         });
     }
 
@@ -35,21 +36,8 @@ class App extends React.Component {
         this.setState({ view: "addTaskView"});
     }
 
-    onAddTask = (taskName, taskType) => {
-        let tasks = this.state.tasks;
-        tasks.push({
-            title: taskName,
-            id: this.state.tasks.length + 1,
-            type: taskType,
-            column: 'todo'
-        });
-
-        this.setState({ tasks });
+    onAddTask = () => {
         this.setState({view: "gridView"})
-    };
-
-    onUpdateTaskList = (newTaskList) => {
-        this.setState({ tasks: newTaskList });
     };
 
     render() {
@@ -58,7 +46,7 @@ class App extends React.Component {
 
         if (this.state.view === "gridView") {
             navBar = <NavBar view={this.state.view} onClick={this.handleAddTaskClick} />;
-            view = <GridView tasks={this.state.tasks} onUpdateTaskList={this.onUpdateTaskList} />;
+            view = <GridView />;
         }
         else {
             navBar = <NavBar view={this.state.view} onClick={this.handleGridViewClick} />;
@@ -67,11 +55,17 @@ class App extends React.Component {
 
         return (
             <div>
-                {navBar}
-                {view}
+                { navBar }
+                { view }
             </div>
         );
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        errorMessage: state.errors.getTasks
+    };
+};
+
+export default connect(mapStateToProps, { setTasks, tasksError })(App);

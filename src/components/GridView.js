@@ -1,70 +1,64 @@
 import React from 'react';
 import { connect } from "react-redux";
-import '../styles/GridView.css';
+
+import { markToDo } from "../actions";
+import { markInProgress } from "../actions";
+import { markReview} from "../actions";
+import { markDone } from "../actions";
+import { deleteTask } from "../actions";
 
 import TaskItem from './TaskItem';
 import TaskItem2 from './Taskitem2';
 import TaskItem3 from './Tastitem3';
 import TaskItem4 from './TaskItem4';
 
+import '../styles/GridView.css';
 
 class GridView extends React.Component {
 
-    constructor(props) { // Inside of a class we don't need the function keyword or a fat arrow.
-        super(props); // Send props to it's superclass React.Component
-
-        this.state = { // Need to set an initial State... more on this later.
-            FilteredTasks:props.tasks
-        };
-    }
-
     markToDo = (task) => {
-        let taskList = this.props.tasks;
-        task.column="todo";
-        console.log(this.props);
-        this.props.onUpdateTaskList(taskList);
+        this.props.markToDo(task.id);
     };
 
     markInProgress = (task) => {
-        let taskList = this.props.tasks;
-        task.column="in-progress";
-        console.log(this.props);
-        this.props.onUpdateTaskList(taskList);
+        this.props.markInProgress(task.id);
     };
 
     markReview = (task) => {
-        let taskList = this.props.tasks;
-        task.column="review";
-        console.log(this.props);
-        this.props.onUpdateTaskList(taskList);
+        this.props.markReview(task.id);
     };
 
     markDone = (task) => {
-        let taskList = this.props.tasks;
-        task.column="done";
-        console.log(this.props);
-        this.props.onUpdateTaskList(taskList);
+        this.props.markDone(task.id);
+    };
+
+    deleteTask = (task) => {
+        this.props.deleteTask(task.id);
     };
 
     render() {
         const taskItems3 = this.props.tasks.map(task => {
-            if(task.column === "todo")
-                return <TaskItem3 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone}/>
+            if(task.column === "todo") {
+                return <TaskItem3 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone} deleteTask={this.deleteTask}/>
+            }
         });
 
         const taskItems2 = this.props.tasks.map(task => {
-            if(task.column === "in-progress")
-                return <TaskItem2 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone}/>
+            if(task.column === "in-progress") {
+                return <TaskItem2 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone} deleteTask={this.deleteTask}/>
+            }
         });
 
         const taskItems4 = this.props.tasks.map(task => {
-            if(task.column === "review")
-                return <TaskItem4 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone}/>
+            if(task.column === "review") {
+                return <TaskItem4 task={task} key={task.id} markToDo={this.markToDo} markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone} deleteTask={this.deleteTask}/>
+            }
         });
 
         const taskItems = this.props.tasks.map(task => {
-            if(task.column === "done")
-                return <TaskItem task={task} key={task.id} markToDo={this.markToDo}  markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone}/>
+            if(task.column === "done") {
+                return <TaskItem task={task} key={task.id} markToDo={this.markToDo}  markInProgress={this.markInProgress} markReview={this.markReview} markDone={this.markDone} deleteTask={this.deleteTask}/>
+            }
         });
 
         return (
@@ -110,9 +104,9 @@ class GridView extends React.Component {
 }
 
 const mapStateToProps = state => {
- return {
-     tasks: state.tasks.tasks
- }
+    return {
+        tasks: state.tasks
+    };
 };
 
-export default connect(mapStateToProps)(GridView);
+export default connect(mapStateToProps, { markToDo, markInProgress, markReview, markDone, deleteTask })(GridView);
