@@ -1,5 +1,6 @@
 import React from 'react';
-import './styles/GridView.css';
+import { connect } from "react-redux";
+import '../styles/GridView.css';
 
 import TaskItem from './TaskItem';
 import TaskItem2 from './Taskitem2';
@@ -108,4 +109,10 @@ class GridView extends React.Component {
     }
 }
 
-export default GridView;
+const mapStateToProps = state => {
+ return {
+     tasks: state.tasks.tasks
+ }
+};
+
+export default connect(mapStateToProps)(GridView);
