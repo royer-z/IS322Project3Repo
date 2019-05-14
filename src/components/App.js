@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
+import NavBar from "./NavBar";
 import HomeView from "./HomeView";
 import AddTaskView from "./AddTaskView";
-import NavBar from "./NavBar";
+import VariableTask from "./VariableTask";
 
 const App = () => {
     return (
@@ -13,6 +14,7 @@ const App = () => {
                 <div>
                     <Route path="/" exact component={ HomeView } />
                     <Route path="/AddTask" exact component={ AddTaskView } />
+                    <Route path="/tasks/:id" component={ VariableTask } />
                 </div>
             </BrowserRouter>
         </div>
